@@ -156,7 +156,22 @@ def testAnotherConnection():
 
 	# print(balance or 'nope no balance retreived')
 	# dl_transactions_page2.logout()
+def get_transactions(last_x_days=1):
+	banesco_crawler = BanescoAppCrawler()
 
+	transactions=banesco_crawler.login().browser.visit(dlTransactionsPage1).current_page.download_last_x_days(last_x_days)#.download_transactions()#.current_page.get_directory_list()
+
+
+	#browser.visit('https://www.banesconline.com/mantis/WebSite/consultamovimientoscuenta/movimientoscuenta.aspx')
+
+	
+	#PAGE X
+	# dl_transactions_page1= dlTransactionsPage1(browser)
+	# dl_transactions_page1.download_last_x_days(download_last_x_days)
+
+	dl_transactions_page2= dlTransactionsPage2(banesco_crawler.browser)
+	dl_transactions_page2.download_transactions()
+	return transactions
 
 def main():
 	browser = BanescoBrowser(**settings.BROWSER_ARGUMENTS['CHROME'])
@@ -233,7 +248,7 @@ def main():
 	# 	print('c')
 	# 	current_page =already_connected_page
 
-	time.sleep(120)
+	#time.sleep(120)
 	current_pate.logout()	
 	
 	#dl_transactions_page1.logout()
@@ -244,4 +259,6 @@ def main():
 	#usuario_field= page.find_element()
 if __name__ == '__main__':
     #print( "Hello World again from %s!" % __name__)
-    testAnotherConnection()
+    #testAnotherConnection()
+    a= get_transactions(30)
+    print(a)

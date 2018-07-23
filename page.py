@@ -272,7 +272,7 @@ class dlTransactionsPage1(LoggedInPage):
 
         # wait for load code ctl00_cp_btnMostrar
         try:
-            myElem = WebDriverWait(self.browser.driver, self.timeout).until(EC.presence_of_element_located((By.ID, 'ctl00_cp_rdbRango')))
+            myElem = WebDriverWait(self.browser.driver, 30).until(EC.presence_of_element_located((By.ID, 'ctl00_cp_rdbRango')))
         except TimeoutException:
             print("Loading took too much time!")
 
