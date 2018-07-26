@@ -165,7 +165,10 @@ class LoginPasswordPage(LoginUsuarioPage):
         return self
 
 
-
+class TransferPage2(BasePage):
+    def click_accept_button(self):
+        self.browser.find(TransferPage2Locator.ACCEPT_BUTTON).click()
+        return self
 
 class TransferPage1( BasePage ):
     url ='https://www.banesconline.com/mantis/WebSite/transferencias/tercerosbanesco.aspx'
@@ -178,22 +181,29 @@ class TransferPage1( BasePage ):
         data= {}
         return data
 
-    def fill_form(self, data):
-        self.get_payee_data(id=19077308)
-        ACCOUNT_SELECTOR= self.browser.find(TransferPage1.ACCOUNT_SELECTOR).send_keys()
-        ACCOUNT_NUMBER= self.browser.find(TransferPage1.ACCOUNT_NUMBER).send_keys()
-        ACCOUNT_NAME= self.browser.find(TransferPage1.ACCOUNT_NAME).send_keys()
-        NATIONALITY= self.browser.find(TransferPage1.NATIONALITY).send_keys()
-        ID_NUMBER= self.browser.find(TransferPage1.ID_NUMBER).send_keys()
-        AMOUNT= self.browser.find(TransferPage1.AMOUNT).send_keys()
-        DESCRIPTION= self.browser.find(TransferPage1.DESCRIPTION).send_keys()
+    def fill_form(self, contact, amount):
+        #self.get_payee_data(id=19077308)
 
-        ACCEPT_BUTTON= self.browser.find(TransferPage1.ACCEPT_BUTTON).click()
+        '''
+                    'fecha' : datetime.strptime(new_row[0], '%d/%m/%Y'), #parsing string as date
+                    'referencia' :new_row[1],
+                    'descripcion' :new_row[2],
+                    'monto': decimal.Decimal(new_row[3]), #parse string as type decimal
+                    'saldo' : decimal.Decimal(new_row[4])
+        '''
+        #ACCOUNT_SELECTOR= self.browser.find(TransferPage1.ACCOUNT_SELECTOR).send_keys(contact.get('cuenta a debitar'))
+        ACCOUNT_SELECTOR= Select(self.browser.find(TransferPage1Locator.ACCOUNT_SELECTOR)).select_by_index(1)
+        ACCOUNT_NUMBER= self.browser.find(TransferPage1Locator.ACCOUNT_NUMBER).send_keys(contact.get('codigo_cuenta'))
+        ACCOUNT_NAME= self.browser.find(TransferPage1Locator.ACCOUNT_NAME).send_keys(contact.get('nombre'))
+        NATIONALITY= self.browser.find(TransferPage1Locator.NATIONALITY).send_keys(contact.get('nacionalidad'))
+        ID_NUMBER= self.browser.find(TransferPage1Locator.ID_NUMBER).send_keys(contact.get('cedula'))
+        AMOUNT= self.browser.find(TransferPage1Locator.AMOUNT).send_keys( amount )
+        DESCRIPTION= self.browser.find(TransferPage1Locator.DESCRIPTION).send_keys("transferencia por sistema")
+
+        self.click_accept_button()
+        return TransferPage2(self.browser)
 
 
-class TransferPage2(BasePage):
-    def click_accept_button(self):
-        self.browser.find(TransferPage2Locator.ACCEPT_BUTTON).click()
 
 
 class TransferPage3(BasePage):
@@ -376,14 +386,14 @@ class dlTransactionsPage2(LoggedInPage):
                 new_row ={ 
                     'fecha' : datetime.strptime(new_row[0], '%d/%m/%Y'), #parsing string as date
                     'referencia' :new_row[1],
-                    'decripcion' :new_row[2],
+                    'descripcion' :new_row[2],
                     'monto': decimal.Decimal(new_row[3]), #parse string as type decimal
                     'saldo' : decimal.Decimal(new_row[4])
                 } 
                 json_data.append(new_row)
 
-        print(json_data)
-        return self
+        #print(json_data)
+        return json_data
 
 class DirectoryPage(LoggedInPage):
 

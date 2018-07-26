@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from locators import *
 from selenium.webdriver.support.ui import WebDriverWait 
 from decorators import *
+
 class Browser(object):
 
     #base_url = 'http://localhost:8000'

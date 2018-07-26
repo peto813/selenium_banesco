@@ -163,15 +163,20 @@ def get_transactions(last_x_days=1):
 
 
 	#browser.visit('https://www.banesconline.com/mantis/WebSite/consultamovimientoscuenta/movimientoscuenta.aspx')
-
-	
 	#PAGE X
 	# dl_transactions_page1= dlTransactionsPage1(browser)
 	# dl_transactions_page1.download_last_x_days(download_last_x_days)
 
 	dl_transactions_page2= dlTransactionsPage2(banesco_crawler.browser)
-	dl_transactions_page2.download_transactions()
-	return transactions
+	return dl_transactions_page2.download_transactions()
+
+
+def transfer(contact, amount):
+	banesco_crawler = BanescoAppCrawler()
+
+	banesco_crawler.login().browser.visit(TransferPage1).current_page.fill_form(contact, amount).click_accept_button()
+	# pagex = LoginUsuarioPage(banesco_crawler.browser)
+	# pagex.TransferPage2().click_accept_button()
 
 def main():
 	browser = BanescoBrowser(**settings.BROWSER_ARGUMENTS['CHROME'])
@@ -257,8 +262,25 @@ def main():
 	#browser
 	#page = LoginUsuarioPage(browser, timeout = settings.TIMEOUT)
 	#usuario_field= page.find_element()
+
 if __name__ == '__main__':
-    #print( "Hello World again from %s!" % __name__)
     #testAnotherConnection()
-    a= get_transactions(30)
-    print(a)
+
+    ###############################
+    # transactions = get_transactions(30)
+    # reference_id='01644622169'
+    # reference = [ item for item in transactions if reference_id in item.get('referencia')]
+    # print( len(reference)  > 0 )# an item  byt that reference number exists
+    ###############################
+    import math
+    amount = str( math.ceil(10.5)).split('.')[0]
+    contact= {
+    	'codigo_cuenta' :'01340262142623025724',
+    	'nombre' :'einstein millan',
+    	'nacionalidad' :'v',
+    	'cedula' :'6750435'
+    }
+    transfer(contact, amount)
+
+
+	
